@@ -31,7 +31,6 @@ import (
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/forward"
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/hosts"
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/ipset"
-	. "sy-mosdns/plugin/executable/iptoshell"
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/marker"
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/misc_optm"
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/nftset"
