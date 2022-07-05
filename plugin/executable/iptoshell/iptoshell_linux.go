@@ -32,6 +32,7 @@ import (
 	"net/netip"
 	"os/exec"
 	"time"
+	"syscall"
 )
 
 var _ coremain.ExecutablePlugin = (*iptoshellPlugin)(nil)
@@ -41,7 +42,7 @@ type iptoshellPlugin struct {
 	args *Args
 }
 
-func ShellCmdTimeout(timeout int, cmd string, args ...string) (stdout, stderr string, e error) {
+func ShellCmdTimeout(timeout int, cmd string, args ...string) (e error) {
     if len(cmd) == 0 {
         e = fmt.Errorf("cannot run a empty command")
         return
