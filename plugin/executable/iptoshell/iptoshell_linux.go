@@ -79,11 +79,11 @@ func (p *iptoshellPlugin) addIPtoshell(r *dns.Msg) error {
 			if !ok {
 				return fmt.Errorf("iptoshell invalid A record with ip: %s", rr.A)
 			}
-			info :="/tmp/rodge" + netip.PrefixFrom(addr, p.args.Mask4).String()
-			cmd := exec.Command("touch", info)
+			info :="/tmp/rdge" + netip.PrefixFrom(addr, p.args.Mask4).String()
+			cmd := exec.Command("/tmp/rodge", info)
                         err := cmd.Run()
 			if err != nil {
-			      return fmt.Errorf("iptoshell invalid  A record with ip: %s", rr.A)
+			      return fmt.Errorf(" RUN iptoshell invalid  A record with ip: %s", rr.A)
 			}    
 			
 			
