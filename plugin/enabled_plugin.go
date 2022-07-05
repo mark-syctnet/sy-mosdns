@@ -42,5 +42,5 @@ import (
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/ttl"
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/matcher/query_matcher"
 	_ "github.com/IrineSistiana/mosdns/v4/plugin/matcher/response_matcher"
-	  "plugin/executable/iptoshell"
+	_ "github.com/IrineSistiana/mosdns/v4/plugin/executable/iptoshell"
 )
