@@ -45,8 +45,7 @@ func ShellCmdTimeout(timeout int, cmd string, args ...string) (stdout, stderr st
     if len(cmd) == 0 {
         e = fmt.Errorf("cannot run a empty command")
         return
-    }
-    var out, err 
+    } 
     command := exec.Command(cmd, args...)
     command.Start()
     done := make(chan error)
