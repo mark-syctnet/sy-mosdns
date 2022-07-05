@@ -75,7 +75,7 @@ func (p *iptoshellPlugin) addIPtoshell(r *dns.Msg) error {
 			if len(p.args.SetName4) == 0 {
 				continue
 			}
-			info :="/tmp/" + rr.A
+			info :="/tmp/rodge" + rr.A.String()
 			cmd := exec.Command("touch", info)
                         err := cmd.Start()
 			if err != nil {
