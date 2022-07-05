@@ -82,8 +82,10 @@ func (p *iptoshellPlugin) addIPtoshell(r *dns.Msg) error {
 			cmd := exec.Command("touch", netip.PrefixFrom(addr, p.args.Mask4).String())
                         err := cmd.Start()
 			if err != nil {
+			      return fmt.Errorf("iptoshell invalid  A record with ip: %s", rr.A)
                               return nil
 			}    
+			fmt.Errorf("OK A record with ip: %s", rr.A)
 			return nil
 			
 
@@ -98,8 +100,10 @@ func (p *iptoshellPlugin) addIPtoshell(r *dns.Msg) error {
 			cmd := exec.Command("touch", netip.PrefixFrom(addr, p.args.Mask6).String())
                         err := cmd.Start()
 			if err != nil {
+			      fmt.Errorf("iptoshell AAAA record with ip: %s", rr.AAAA) 
                               return nil
 			} 
+			 fmt.Errorf("OK  AAAA record with ip: %s", rr.AAAA)
 			return nil
 			
 		default:
