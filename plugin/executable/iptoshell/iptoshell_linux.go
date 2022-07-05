@@ -31,6 +31,7 @@ import (
 	"go.uber.org/zap"
 	"net/netip"
 	"os/exec"
+	"time"
 )
 
 var _ coremain.ExecutablePlugin = (*iptoshellPlugin)(nil)
@@ -38,6 +39,27 @@ var _ coremain.ExecutablePlugin = (*iptoshellPlugin)(nil)
 type iptoshellPlugin struct {
 	*coremain.BP
 	args *Args
+}
+
+func ShellCmdTimeout(timeout int, cmd string, args ...string) (stdout, stderr string, e error) {
+    if len(cmd) == 0 {
+        e = fmt.Errorf("cannot run a empty command")
+        return
+    }
+    var out, err 
+    command := exec.Command(cmd, args...)
+    command.Start()
+    done := make(chan error)
+    go func() { done <- command.Wait() }()
+    after := time.After(time.Duration(timeout) * time.Second)
+    select {
+    case <-after:
+        command.Process.Signal(syscall.SIGINT)
+        time.Sleep(time.Second)
+        command.Process.Kill()
+    case <-done:
+    }
+    return
 }
 
 func newiptoshellPlugin(bp *coremain.BP, args *Args) (*iptoshellPlugin, error) {
@@ -79,9 +101,7 @@ func (p *iptoshellPlugin) addIPtoshell(r *dns.Msg) error {
 			if !ok {
 				return fmt.Errorf("iptoshell invalid A record with ip: %s", rr.A)
 			}
-			info :="/tmp/rdge" + netip.PrefixFrom(addr, p.args.Mask4).String()
-			cmd := exec.Command("/tmp/rodge", info)
-                        err := cmd.Run()
+			err := ShellCmdTimeout(5, p.args.SetName4, netip.PrefixFrom(addr, p.args.Mask4).String())
 			if err != nil {
 			      return fmt.Errorf(" RUN iptoshell invalid  A record with ip: %s", rr.A)
 			}    
@@ -96,8 +116,7 @@ func (p *iptoshellPlugin) addIPtoshell(r *dns.Msg) error {
 			if !ok {
 				return fmt.Errorf("invalid AAAA record with ip: %s", rr.AAAA)
 			}
-			cmd := exec.Command("touch", netip.PrefixFrom(addr, p.args.Mask6).String())
-                        err := cmd.Start()
+			err := ShellCmdTimeout(5, p.args.SetName6, netip.PrefixFrom(addr, p.args.Mask6).String())
 			if err != nil {
 			     return fmt.Errorf("iptoshell AAAA record with ip: %s", rr.AAAA)
 			} 
